@@ -1,2 +1,2 @@
-export { GitlabNamespace, GitlabProject, GitlabMergeRequest } from "./gitlab.model";
-export { Namespace, Project, MergeRequest } from "./aggregator.model";
+export { GitlabNamespace, GitlabProject, GitlabMergeRequest, GitlabApprovalRule, GitlabApprovalState } from "./gitlab.model";
+export { Namespace, Project, MergeRequest, ApprovalRule, ApprovalState } from "./aggregator.model";

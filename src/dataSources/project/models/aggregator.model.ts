@@ -33,4 +33,16 @@ interface MergeRequest {
     webUrl: string;
 }
 
-export { Namespace, Project, MergeRequest }
+interface ApprovalRule {
+    id: number;
+    name: string;
+    eligibleApprovers: User[];
+    approvalsRequired: number;
+    approvedBy: User[]
+}
+
+interface ApprovalState {
+    rules: ApprovalRule[]
+}
+
+export { Namespace, Project, MergeRequest, ApprovalRule, ApprovalState }

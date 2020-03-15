@@ -35,7 +35,20 @@ const typeDefs: DocumentNode = gql`
         assignee: User,
         author: User!,
         userNotesCount: Int!,
-        webUrl: String!
+        webUrl: String!,
+        approvalState: ApprovalState
+    }
+
+    type ApprovalState {
+        rules: [ApprovalRule]
+    }
+
+    type ApprovalRule {
+        id: ID!,
+        name: String!,
+        eligibleApprovers: [User],
+        approvalsRequired: Int,
+        approvedBy: [User]
     }
 
     type User {

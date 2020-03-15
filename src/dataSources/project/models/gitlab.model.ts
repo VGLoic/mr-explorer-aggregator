@@ -33,8 +33,22 @@ interface GitlabMergeRequest {
     web_url: string;
 }
 
+interface GitlabApprovalRule {
+    id: number;
+    name: string;
+    eligible_approvers: GitlabUser[];
+    approvals_required: number;
+    approved_by: GitlabUser[]
+}
+
+interface GitlabApprovalState {
+    rules: GitlabApprovalRule[]
+}
+
 export {
     GitlabNamespace,
     GitlabProject,
-    GitlabMergeRequest
+    GitlabMergeRequest,
+    GitlabApprovalRule,
+    GitlabApprovalState
 }

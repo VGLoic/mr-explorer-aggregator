@@ -1,6 +1,6 @@
 import { RESTDataSource, RequestOptions } from 'apollo-datasource-rest';
-import { GitlabProject, Project, GitlabMergeRequest, MergeRequest } from "./models";
-import { gitlabProjectToProject, gitlabMrToMr } from "./mappers";
+import { GitlabProject, Project, GitlabMergeRequest, MergeRequest, GitlabApprovalState, ApprovalState } from "./models";
+import { gitlabProjectToProject, gitlabMrToMr, gitlabApprovalStateToApprovalState } from "./mappers";
 import { User, GitlabUser, gitlabUserToUser } from '../user';
 
 export class ProjectAPI extends RESTDataSource {
@@ -40,9 +40,16 @@ export class ProjectAPI extends RESTDataSource {
 
     async getProjectMergeRequests(projectId: string): Promise<MergeRequest[]> {
         const gitlabMergeRequests: GitlabMergeRequest[] = await this.get(`/${projectId}/merge_requests`, {
-           state: "all",
+           state: "opened",
            created_after: "2020-03-10"
         });
         return gitlabMergeRequests.map(gitlabMrToMr);
+    }
+
+    async getMergeRequestApprovalState(projectId: string, mergeRequestIid: string): Promise<ApprovalState> {
+        const gitlabApprovalState: GitlabApprovalState = await this.get(
+            `/${projectId}/merge_requests/${mergeRequestIid}/approval_state`
+        );
+        return gitlabApprovalStateToApprovalState(gitlabApprovalState);
     }
 }

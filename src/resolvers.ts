@@ -1,6 +1,6 @@
 import { Context } from "./context/context";
 import { User } from "./dataSources/user";
-import { Project, MergeRequest } from "./dataSources/project";
+import { Project, MergeRequest, ApprovalState } from "./dataSources/project";
 
 const resolvers = {
     Query: {
@@ -40,6 +40,18 @@ const resolvers = {
             { dataSources }: Context
         ): Promise<MergeRequest[]> => {
             return dataSources.projectAPI.getProjectMergeRequests(projectId.toString());
+        }
+    },
+    MergeRequest: {
+        approvalState: async (
+            { projectId, iid }: MergeRequest,
+            __,
+            { dataSources }: Context
+        ): Promise<ApprovalState> => {
+            return dataSources.projectAPI.getMergeRequestApprovalState(
+                projectId.toString(),
+                iid.toString()
+            );
         }
     },
     User: {
