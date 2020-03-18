@@ -11,7 +11,8 @@ interface GitlabProject {
     description?: string;
     name: string;
     path_with_namespace: string;
-    namespace: GitlabNamespace
+    namespace: GitlabNamespace;
+    created_at: string;
 }
 
 interface GitlabMergeRequest {

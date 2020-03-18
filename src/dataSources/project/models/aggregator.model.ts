@@ -10,8 +10,9 @@ interface Project {
     id: number;
     description?: string;
     name: string;
-    pathWithNamespace
+    pathWithNamespace: string;
     namespace: Namespace;
+    createdAt: string;
 }
 
 interface MergeRequest {

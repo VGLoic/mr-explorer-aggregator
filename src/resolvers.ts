@@ -1,6 +1,9 @@
 import { Context } from "./context/context";
 import { User } from "./dataSources/user";
 import { Project, MergeRequest, ApprovalState } from "./dataSources/project";
+import { ProjectConnection } from "./common/response.types";
+import { toProjectConnection } from "./common/response.mappers";
+import { configService } from "./config/config.service";
 
 const resolvers = {
     Query: {
@@ -13,10 +16,14 @@ const resolvers = {
         },
         searchProjects: async (
             _,
-            { search }: { search: string },
+            { search, first, after }: { search: string, first: number, after: number },
             { dataSources } : Context
-        ): Promise<Project[]> => {
-            return dataSources.projectAPI.getUserProjects(search);
+        ): Promise<ProjectConnection> => {
+            if (first > parseInt(configService.get("pageLimit"))) {
+                throw new Error("Ooops, that much quantity is not supported yet :(");
+            }
+            const projects: Project[] = await dataSources.projectAPI.getUserProjects(search, after);
+            return toProjectConnection(first, projects);
         },
         project: async (
             _,

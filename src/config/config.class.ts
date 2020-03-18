@@ -1,7 +1,11 @@
-interface Config {}
+interface Config {
+    pageLimit: string;
+}
 
 class ConfigService {
-    config: Config = {}
+    config: Config = {
+        pageLimit: "10"
+    }
 
     get(key: string): string {
         if (!(key in this.config)) {

@@ -9,6 +9,21 @@ const typeDefs: DocumentNode = gql`
         fullPath: String!
     }
 
+
+    type ProjectConnection {
+        edges: [ProjectEdge],
+        pageInfo: PageInfo!
+    }
+
+    type PageInfo {
+        hasNextPage: Boolean!
+    }
+
+    type ProjectEdge {
+        cursor: String!,
+        node: Project!
+    }
+
     type Project {
         id: ID!,
         name: String!,
@@ -17,6 +32,16 @@ const typeDefs: DocumentNode = gql`
         namespace: Namespace!,
         users: [User],
         mergeRequests: [MergeRequest]
+    }
+
+    type MergeRequestConnection {
+        edges: [MergeRequestEdge],
+        pageInfo: PageInfo!
+    }
+
+    type MergeRequestEdge {
+        cursor: String!,
+        node: MergeRequest!
     }
 
     type MergeRequest {
@@ -62,7 +87,7 @@ const typeDefs: DocumentNode = gql`
 
     type Query {
         currentUser: User,
-        searchProjects(search: String): [Project],
+        searchProjects(search: String, first: Int = 10, after: Int = 0): ProjectConnection,
         project(projectId: String!): Project
     }
 `
