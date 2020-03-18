@@ -1,4 +1,5 @@
 import { RESTDataSource, RequestOptions } from 'apollo-datasource-rest';
+import { configService } from '../../config/config.service';
 import { GitlabUser, User } from "./models";
 import { gitlabUserToUser } from "./mappers";
 
@@ -10,7 +11,10 @@ export class UserAPI extends RESTDataSource {
 
     willSendRequest(request: RequestOptions): void {
         request.headers.set('Authorization', `Bearer ${this.context.accessToken}`);
-        request.params.set("per_page", "100");
+        if (!request.params.get("per_page")){
+            const pageLimit: number = parseInt(configService.get("pageLimit"));
+            request.params.set("per_page", pageLimit.toString());
+        }
     }
 
     async getCurrentUser(): Promise<User> {

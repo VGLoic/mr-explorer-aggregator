@@ -12,8 +12,10 @@ export class ProjectAPI extends RESTDataSource {
 
     willSendRequest(request: RequestOptions): void {
         request.headers.set('Authorization', `Bearer ${this.context.accessToken}`);
-        const pageLimit: number = parseInt(configService.get("pageLimit"));
-        request.params.set("per_page", pageLimit.toString());
+        if (!request.params.get("per_page")){
+            const pageLimit: number = parseInt(configService.get("pageLimit"));
+            request.params.set("per_page", pageLimit.toString());
+        }
     }
 
     async getUserProjects(search: string = "", after: number = 0): Promise<Project[]> {
@@ -42,7 +44,7 @@ export class ProjectAPI extends RESTDataSource {
     }
 
     async getProjectUsers(projectId: string): Promise<User[]> {
-        const gitlabUsers: GitlabUser[] = await this.get(`/${projectId}/users`);
+        const gitlabUsers: GitlabUser[] = await this.get(`/${projectId}/users`, { per_page: "100" });
         return gitlabUsers.map(gitlabUserToUser);
     }
 
