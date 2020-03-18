@@ -1,6 +1,5 @@
-import { Project } from "../dataSources/project";
-import { ProjectConnection, ProjectEdge } from "./response.types";
-import { configService } from "../config/config.service";
+import { Project, MergeRequest } from "../dataSources/project";
+import { ProjectConnection, ProjectEdge, MergeRequestConnection, MergeRequestEdge } from "./response.types";
 
 const toProjectConnection = (first: number, projects: Project[]): ProjectConnection => {
     const hasNextPage = projects.length > first;
@@ -22,4 +21,24 @@ const toProjectEdge = (project: Project): ProjectEdge => {
     };
 }
 
-export { toProjectConnection, toProjectEdge }
+const toMergeRequestConnection = (first: number, mergeRequests: MergeRequest[]): MergeRequestConnection => {
+    const hasNextPage = mergeRequests.length > first;
+    
+    const edges: MergeRequestEdge[] = mergeRequests.map(toMergeRequestEdge).slice(0, first);
+
+    return {
+        edges,
+        pageInfo: {
+            hasNextPage
+        }
+    };
+}
+
+const toMergeRequestEdge = (mergeRequest: MergeRequest): MergeRequestEdge => {
+    return {
+        cursor: mergeRequest.createdAt,
+        node: mergeRequest
+    };
+}
+
+export { toProjectConnection, toProjectEdge, toMergeRequestConnection, toMergeRequestEdge }

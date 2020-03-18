@@ -48,10 +48,12 @@ export class ProjectAPI extends RESTDataSource {
         return gitlabUsers.map(gitlabUserToUser);
     }
 
-    async getProjectMergeRequests(projectId: string): Promise<MergeRequest[]> {
+    async getProjectMergeRequests(projectId: string, after: string = ""): Promise<MergeRequest[]> {
         const gitlabMergeRequests: GitlabMergeRequest[] = await this.get(`/${projectId}/merge_requests`, {
            state: "opened",
-           created_after: "2020-03-10"
+           order_by: "created_at",
+           sort: "asc",
+           created_after: after
         });
         return gitlabMergeRequests.map(gitlabMrToMr);
     }

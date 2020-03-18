@@ -20,7 +20,13 @@ const typeDefs: DocumentNode = gql`
     }
 
     type ProjectEdge {
-        cursor: String!,
+        """
+        Cursor for project is the ID since the pagination by created_at is not supported by gitlab
+        """
+        cursor: Int!,
+        """
+        Project node
+        """
         node: Project!
     }
 
@@ -31,7 +37,7 @@ const typeDefs: DocumentNode = gql`
         pathWithNamespace: String!,
         namespace: Namespace!,
         users: [User],
-        mergeRequests: [MergeRequest]
+        mergeRequests (first: Int = 5, after: String = "2019-01-01"): MergeRequestConnection
     }
 
     type MergeRequestConnection {
@@ -40,7 +46,13 @@ const typeDefs: DocumentNode = gql`
     }
 
     type MergeRequestEdge {
+        """
+        Cursor for merge request is the created_at since the pagination by ID is not supported by gitlab
+        """
         cursor: String!,
+        """
+        Merge request node
+        """
         node: MergeRequest!
     }
 
@@ -87,7 +99,7 @@ const typeDefs: DocumentNode = gql`
 
     type Query {
         currentUser: User,
-        searchProjects(search: String, first: Int = 10, after: Int = 0): ProjectConnection,
+        searchProjects(search: String, first: Int = 5, after: Int = 0): ProjectConnection,
         project(projectId: String!): Project
     }
 `

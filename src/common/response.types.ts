@@ -1,4 +1,4 @@
-import { Project } from "../dataSources/project";
+import { Project, MergeRequest } from "../dataSources/project";
 
 interface PageInfo {
     hasNextPage: boolean;
@@ -14,8 +14,20 @@ interface ProjectConnection {
     pageInfo: PageInfo
 }
 
+interface MergeRequestEdge {
+    cursor: string;
+    node: MergeRequest;
+}
+
+interface MergeRequestConnection {
+    edges: MergeRequestEdge[];
+    pageInfo: PageInfo;
+}
+
 export {
     PageInfo,
     ProjectEdge,
-    ProjectConnection
+    ProjectConnection,
+    MergeRequestEdge,
+    MergeRequestConnection
 };

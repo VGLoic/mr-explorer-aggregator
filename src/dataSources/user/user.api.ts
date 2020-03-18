@@ -21,15 +21,4 @@ export class UserAPI extends RESTDataSource {
         const gitlabUser: GitlabUser = await this.get("/");
         return gitlabUserToUser(gitlabUser);
     }
-
-    async getUserProjects(): Promise<any> {
-        const projects = await this.get(
-            `/projects`,
-            {
-                membership: true
-            }
-        );
-        console.log("Projects: ", projects);
-        return [];
-    }
 }
