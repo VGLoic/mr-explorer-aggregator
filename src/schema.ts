@@ -12,11 +12,12 @@ const typeDefs: DocumentNode = gql`
 
     type ProjectConnection {
         edges: [ProjectEdge],
-        pageInfo: PageInfo!
+        pageInfo: ProjectPageInfo!
     }
 
-    type PageInfo {
-        hasNextPage: Boolean!
+    type ProjectPageInfo {
+        hasNextPage: Boolean!,
+        endCursor: Int
     }
 
     type ProjectEdge {
@@ -42,7 +43,12 @@ const typeDefs: DocumentNode = gql`
 
     type MergeRequestConnection {
         edges: [MergeRequestEdge],
-        pageInfo: PageInfo!
+        pageInfo: MergeRequestPageInfo!
+    }
+
+    type MergeRequestPageInfo {
+        hasNextPage: Boolean!,
+        endCursor: String
     }
 
     type MergeRequestEdge {

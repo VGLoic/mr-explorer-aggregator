@@ -5,11 +5,14 @@ const toProjectConnection = (first: number, projects: Project[]): ProjectConnect
     const hasNextPage = projects.length > first;
 
     const edges: ProjectEdge[] = projects.map(toProjectEdge).slice(0, first);
+
+    const endCursor: number = hasNextPage ? edges[first].cursor : null;
     
     return {
         edges,
         pageInfo: {
-            hasNextPage
+            hasNextPage,
+            endCursor
         }
     }
 }
@@ -26,10 +29,13 @@ const toMergeRequestConnection = (first: number, mergeRequests: MergeRequest[]):
     
     const edges: MergeRequestEdge[] = mergeRequests.map(toMergeRequestEdge).slice(0, first);
 
+    const endCursor: string = hasNextPage ? edges[first].cursor : null;
+
     return {
         edges,
         pageInfo: {
-            hasNextPage
+            hasNextPage,
+            endCursor
         }
     };
 }

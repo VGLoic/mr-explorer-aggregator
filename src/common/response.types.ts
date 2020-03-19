@@ -1,7 +1,8 @@
 import { Project, MergeRequest } from "../dataSources/project";
 
-interface PageInfo {
+interface ProjectPageInfo {
     hasNextPage: boolean;
+    endCursor: number | null;
 }
 
 interface ProjectEdge {
@@ -11,7 +12,12 @@ interface ProjectEdge {
 
 interface ProjectConnection {
     edges: ProjectEdge[],
-    pageInfo: PageInfo
+    pageInfo: ProjectPageInfo
+}
+
+interface MergeRequestPageInfo {
+    hasNextPage: boolean;
+    endCursor: string | null;
 }
 
 interface MergeRequestEdge {
@@ -21,13 +27,14 @@ interface MergeRequestEdge {
 
 interface MergeRequestConnection {
     edges: MergeRequestEdge[];
-    pageInfo: PageInfo;
+    pageInfo: MergeRequestPageInfo;
 }
 
 export {
-    PageInfo,
+    ProjectPageInfo,
     ProjectEdge,
     ProjectConnection,
+    MergeRequestPageInfo,
     MergeRequestEdge,
     MergeRequestConnection
 };
