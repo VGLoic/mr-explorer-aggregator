@@ -3,6 +3,7 @@ import { configService } from '../../config/config.service';
 import { GitlabProject, Project, GitlabMergeRequest, MergeRequest, GitlabApprovalState, ApprovalState } from "./models";
 import { gitlabProjectToProject, gitlabMrToMr, gitlabApprovalStateToApprovalState } from "./mappers";
 import { User, GitlabUser, gitlabUserToUser } from '../user';
+import { MrStates } from '../../common/mr-constants';
 
 export class ProjectAPI extends RESTDataSource {
     constructor() {
@@ -48,13 +49,14 @@ export class ProjectAPI extends RESTDataSource {
         return gitlabUsers.map(gitlabUserToUser);
     }
 
-    async getProjectMergeRequests(projectId: string, after: string = ""): Promise<MergeRequest[]> {
-        const gitlabMergeRequests: GitlabMergeRequest[] = await this.get(`/${projectId}/merge_requests`, {
-           state: "opened",
-           order_by: "created_at",
-           sort: "asc",
-           created_after: after
-        });
+    async getProjectMergeRequests(projectId: string, state: MrStates, after: string): Promise<MergeRequest[]> {
+        const params: Record<string, string> = {
+            order_by: "created_at",
+            sort: "asc",
+        };
+        if (state) params.state = state;
+        if (after) params.created_after = after;
+        const gitlabMergeRequests: GitlabMergeRequest[] = await this.get(`/${projectId}/merge_requests`, params);
         return gitlabMergeRequests.map(gitlabMrToMr);
     }
 

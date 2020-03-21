@@ -3,6 +3,14 @@ import { DocumentNode } from 'graphql';
 
 const typeDefs: DocumentNode = gql`
 
+    enum MrStates {
+        OPENED,
+        CLOSED,
+        MERGED,
+        LOCKED,
+        ALL
+    }
+
     type Namespace {
         id: ID!,
         name: String!,
@@ -38,7 +46,7 @@ const typeDefs: DocumentNode = gql`
         pathWithNamespace: String!,
         namespace: Namespace!,
         users: [User],
-        mergeRequests (first: Int = 5, after: String = "2019-01-01"): MergeRequestConnection
+        mergeRequests (first: Int = 5, after: String = "2019-01-01", mrState: MrStates = OPENED): MergeRequestConnection
     }
 
     type MergeRequestConnection {
@@ -106,7 +114,7 @@ const typeDefs: DocumentNode = gql`
     type Query {
         currentUser: User,
         searchProjects(search: String, first: Int = 5, after: Int = 0): ProjectConnection,
-        project(projectId: String!): Project
+        project(projectId: String!, first: Int, after: String, mrState: MrStates): Project
     }
 `
 

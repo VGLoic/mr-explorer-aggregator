@@ -4,8 +4,16 @@ import { Project, MergeRequest, ApprovalState } from "./dataSources/project";
 import { ProjectConnection, MergeRequestConnection } from "./common/response.types";
 import { toProjectConnection, toMergeRequestConnection } from "./common/response.mappers";
 import { configService } from "./config/config.service";
+import { MrStates } from "./common/mr-constants";
 
 const resolvers = {
+    MrStates: {
+        OPENED: MrStates.Opened,
+        CLOSED: MrStates.Closed,
+        MERGED: MrStates.Merged,
+        LOCKED: MrStates.Locked,
+        ALL: MrStates.All
+    },
     Query: {
         currentUser: async (
             _,
@@ -43,13 +51,14 @@ const resolvers = {
         },
         mergeRequests: async(
             { id: projectId }: Project,
-            { first, after }: { first: number, after: string },
+            { first, after, mrState }: { first: number, after: string, mrState: MrStates },
             { dataSources }: Context
         ): Promise<MergeRequestConnection> => {
             if (first > parseInt(configService.get("pageLimit"))) {
                 throw new Error("Ooops, that much quantity is not supported yet :(");
             }
-            const mergeRequests: MergeRequest[] = await dataSources.projectAPI.getProjectMergeRequests(projectId.toString(), after);
+            const mergeRequests: MergeRequest[] =
+                await dataSources.projectAPI.getProjectMergeRequests(projectId.toString(), mrState, after);
             return toMergeRequestConnection(first, mergeRequests);
         }
     },
