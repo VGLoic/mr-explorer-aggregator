@@ -14,11 +14,26 @@
   },
   "devDependencies": {
     "dotenv": "^8.2.0",
+    "husky": ">=4",
+    "lint-staged": ">=10",
     "nodemon-webpack-plugin": "^4.2.1",
+    "prettier": "2.0.1",
     "ts-loader": "^6.2.1",
     "typescript": "^3.7.2",
     "webpack": "^4.41.2",
     "webpack-cli": "^3.3.10",
     "webpack-node-externals": "^1.7.2"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{ts,js,css,md}": "prettier --write"
+  },
+  "prettier": {
+    "useTabs": false,
+    "tabWidth": 2
   }
 }
