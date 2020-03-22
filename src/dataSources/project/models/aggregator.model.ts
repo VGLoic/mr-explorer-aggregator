@@ -1,4 +1,4 @@
-import { User } from "../../user";
+import { User, GitlabUser } from "../../user";
 
 interface Namespace {
   id: number;
@@ -47,4 +47,13 @@ interface ApprovalState {
   rules: ApprovalRule[];
 }
 
-export { Namespace, Project, MergeRequest };
+interface Note {
+  id: number;
+  type: string | null;
+  body: string;
+  author: User;
+  createdAt: string;
+  resolved: boolean;
+}
+
+export { Namespace, Project, MergeRequest, Note };

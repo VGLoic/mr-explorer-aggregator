@@ -90,6 +90,21 @@ const typeDefs: DocumentNode = gql`
     userNotesCount: Int!
     webUrl: String!
     approvedBy: [User]
+    reviews: Reviews
+  }
+
+  type Reviews {
+    notes: [Note]
+    reviewedBy: [User]
+  }
+
+  type Note {
+    id: ID!
+    type: String!
+    body: String!
+    author: User!
+    createdAt: String!
+    resolved: Boolean!
   }
 
   """

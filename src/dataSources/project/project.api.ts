@@ -6,11 +6,14 @@ import {
   GitlabMergeRequest,
   MergeRequest,
   GitlabApprovalState,
+  Note,
+  GitlabNote,
 } from "./models";
 import {
   gitlabProjectToProject,
   gitlabMrToMr,
   gitlabApprovalStateToApprovers,
+  gitlabMrNotesToMrNotes,
 } from "./mappers";
 import { User, GitlabUser, gitlabUserToUser } from "../user";
 import { MrStates } from "../../common/mr-constants";
@@ -87,5 +90,18 @@ export class ProjectAPI extends RESTDataSource {
       `/${projectId}/merge_requests/${mergeRequestIid}/approval_state`
     );
     return gitlabApprovalStateToApprovers(gitlabApprovalState);
+  }
+
+  async getMergeRequestNotes(
+    projectId: string,
+    mergeRequestIid: string
+  ): Promise<Note[]> {
+    const gitlabNotes: GitlabNote[] = await this.get(
+      `/${projectId}/merge_requests/${mergeRequestIid}/notes`,
+      {
+        per_page: "100",
+      }
+    );
+    return gitlabMrNotesToMrNotes(gitlabNotes);
   }
 }

@@ -1,13 +1,15 @@
 import { Context } from "./context/context";
 import { User } from "./dataSources/user";
-import { Project, MergeRequest } from "./dataSources/project";
+import { Project, MergeRequest, Note } from "./dataSources/project";
 import {
   ProjectConnection,
   MergeRequestConnection,
+  Reviews,
 } from "./common/response.types";
 import {
   toProjectConnection,
   toMergeRequestConnection,
+  toReviews,
 } from "./common/response.mappers";
 import { configService } from "./config/config.service";
 import { MrStates } from "./common/mr-constants";
@@ -88,6 +90,17 @@ const resolvers = {
         projectId.toString(),
         iid.toString()
       );
+    },
+    reviews: async (
+      { projectId, iid, author }: MergeRequest,
+      __,
+      { dataSources }: Context
+    ): Promise<Reviews> => {
+      const notes: Note[] = await dataSources.projectAPI.getMergeRequestNotes(
+        projectId.toString(),
+        iid.toString()
+      );
+      return toReviews(notes, author.id);
     },
   },
   User: {

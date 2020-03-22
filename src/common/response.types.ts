@@ -1,4 +1,5 @@
-import { Project, MergeRequest } from "../dataSources/project";
+import { Project, MergeRequest, Note } from "../dataSources/project";
+import { User } from "src/dataSources/user";
 
 interface ProjectPageInfo {
   hasNextPage: boolean;
@@ -30,6 +31,11 @@ interface MergeRequestConnection {
   pageInfo: MergeRequestPageInfo;
 }
 
+interface Reviews {
+  notes: Note[];
+  reviewedBy: User[];
+}
+
 export {
   ProjectPageInfo,
   ProjectEdge,
@@ -37,4 +43,5 @@ export {
   MergeRequestPageInfo,
   MergeRequestEdge,
   MergeRequestConnection,
+  Reviews,
 };

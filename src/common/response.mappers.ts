@@ -1,4 +1,5 @@
-import { Project, MergeRequest } from "../dataSources/project";
+import { Project, MergeRequest, Note } from "../dataSources/project";
+import { User } from "../dataSources/user";
 import {
   ProjectConnection,
   ProjectEdge,
@@ -60,9 +61,26 @@ const toMergeRequestEdge = (mergeRequest: MergeRequest): MergeRequestEdge => {
   };
 };
 
+const toReviews = (notes: Note[], authorId: number) => {
+  const reviewedByMap: Map<number, User> = notes.reduce(
+    (reviewers: Map<number, User>, note: Note): Map<number, User> => {
+      if (note.author.id !== authorId)
+        reviewers.set(note.author.id, note.author);
+      return reviewers;
+    },
+    new Map()
+  );
+  const reviewedBy: User[] = [...reviewedByMap.values()];
+  return {
+    reviewedBy,
+    notes,
+  };
+};
+
 export {
   toProjectConnection,
   toProjectEdge,
   toMergeRequestConnection,
   toMergeRequestEdge,
+  toReviews,
 };

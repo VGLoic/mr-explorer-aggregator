@@ -46,10 +46,21 @@ interface GitlabApprovalState {
   rules: GitlabApprovalRule[];
 }
 
+interface GitlabNote {
+  id: number;
+  type: string | null;
+  system: boolean;
+  body: string;
+  author: GitlabUser;
+  created_at: string;
+  resolved: boolean;
+}
+
 export {
   GitlabNamespace,
   GitlabProject,
   GitlabMergeRequest,
   GitlabApprovalRule,
   GitlabApprovalState,
+  GitlabNote,
 };
