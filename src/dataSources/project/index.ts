@@ -1,2 +1,2 @@
 export { ProjectAPI } from "./project.api";
-export { Project, MergeRequest, ApprovalState } from "./models";
+export { Project, MergeRequest } from "./models";

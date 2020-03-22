@@ -5,10 +5,4 @@ export {
   GitlabApprovalRule,
   GitlabApprovalState,
 } from "./gitlab.model";
-export {
-  Namespace,
-  Project,
-  MergeRequest,
-  ApprovalRule,
-  ApprovalState,
-} from "./aggregator.model";
+export { Namespace, Project, MergeRequest } from "./aggregator.model";

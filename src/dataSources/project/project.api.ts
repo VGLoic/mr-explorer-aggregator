@@ -6,12 +6,11 @@ import {
   GitlabMergeRequest,
   MergeRequest,
   GitlabApprovalState,
-  ApprovalState,
 } from "./models";
 import {
   gitlabProjectToProject,
   gitlabMrToMr,
-  gitlabApprovalStateToApprovalState,
+  gitlabApprovalStateToApprovers,
 } from "./mappers";
 import { User, GitlabUser, gitlabUserToUser } from "../user";
 import { MrStates } from "../../common/mr-constants";
@@ -80,13 +79,13 @@ export class ProjectAPI extends RESTDataSource {
     return gitlabMergeRequests.map(gitlabMrToMr);
   }
 
-  async getMergeRequestApprovalState(
+  async getMergeRequestApprovers(
     projectId: string,
     mergeRequestIid: string
-  ): Promise<ApprovalState> {
+  ): Promise<User[]> {
     const gitlabApprovalState: GitlabApprovalState = await this.get(
       `/${projectId}/merge_requests/${mergeRequestIid}/approval_state`
     );
-    return gitlabApprovalStateToApprovalState(gitlabApprovalState);
+    return gitlabApprovalStateToApprovers(gitlabApprovalState);
   }
 }

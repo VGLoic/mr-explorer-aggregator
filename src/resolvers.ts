@@ -1,6 +1,6 @@
 import { Context } from "./context/context";
 import { User } from "./dataSources/user";
-import { Project, MergeRequest, ApprovalState } from "./dataSources/project";
+import { Project, MergeRequest } from "./dataSources/project";
 import {
   ProjectConnection,
   MergeRequestConnection,
@@ -79,12 +79,12 @@ const resolvers = {
     },
   },
   MergeRequest: {
-    approvalState: async (
+    approvedBy: async (
       { projectId, iid }: MergeRequest,
       __,
       { dataSources }: Context
-    ): Promise<ApprovalState> => {
-      return dataSources.projectAPI.getMergeRequestApprovalState(
+    ): Promise<User[]> => {
+      return dataSources.projectAPI.getMergeRequestApprovers(
         projectId.toString(),
         iid.toString()
       );

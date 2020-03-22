@@ -89,13 +89,19 @@ const typeDefs: DocumentNode = gql`
     author: User!
     userNotesCount: Int!
     webUrl: String!
-    approvalState: ApprovalState
+    approvedBy: [User]
   }
 
+  """
+  DEPRECATED
+  """
   type ApprovalState {
     rules: [ApprovalRule]
   }
 
+  """
+  DEPRECATED
+  """
   type ApprovalRule {
     id: ID!
     name: String!

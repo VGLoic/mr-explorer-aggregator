@@ -34,6 +34,7 @@ interface MergeRequest {
   webUrl: string;
 }
 
+// DEPRECATED
 interface ApprovalRule {
   id: number;
   name: string;
@@ -41,9 +42,9 @@ interface ApprovalRule {
   approvalsRequired: number;
   approvedBy: User[];
 }
-
+// DEPRECATED
 interface ApprovalState {
   rules: ApprovalRule[];
 }
 
-export { Namespace, Project, MergeRequest, ApprovalRule, ApprovalState };
+export { Namespace, Project, MergeRequest };
