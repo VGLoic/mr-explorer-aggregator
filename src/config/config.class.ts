@@ -1,18 +1,18 @@
 interface Config {
-    pageLimit: string;
+  pageLimit: string;
 }
 
 class ConfigService {
-    config: Config = {
-        pageLimit: "10"
-    }
+  config: Config = {
+    pageLimit: "10",
+  };
 
-    get(key: string): string {
-        if (!(key in this.config)) {
-            throw new Error(`Key ${key} does not exist`);
-        }
-        return this.config[key];
+  get(key: string): string {
+    if (!(key in this.config)) {
+      throw new Error(`Key ${key} does not exist`);
     }
+    return this.config[key];
+  }
 }
 
 export { Config, ConfigService };

@@ -1,7 +1,7 @@
 export interface GitlabUser {
-    id: number;
-    name: string;
-    username: string;
-    avatar_url: string;
-    email: string;
+  id: number;
+  name: string;
+  username: string;
+  avatar_url: string;
+  email: string;
 }
