@@ -49,7 +49,7 @@ const typeDefs: DocumentNode = gql`
       fromDate: String = "2019-01-01"
       toDate: String
       after: String
-      mrState: MrStates = OPENED
+      mrState: MrStates = ALL
     ): MergeRequestConnection
   }
 
@@ -138,17 +138,8 @@ const typeDefs: DocumentNode = gql`
 
   type Query {
     currentUser: User
-    searchProjects(
-      search: String
-      first: Int = 5
-      after: Int = 0
-    ): ProjectConnection
-    project(
-      projectId: String!
-      first: Int
-      after: String
-      mrState: MrStates
-    ): Project
+    projects(search: String, first: Int = 5, after: Int = 0): ProjectConnection
+    project(projectId: String!): Project
   }
 `;
 

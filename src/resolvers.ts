@@ -27,7 +27,7 @@ const resolvers = {
     currentUser: async (_, __, { dataSources }: Context): Promise<User> => {
       return dataSources.userAPI.getCurrentUser();
     },
-    searchProjects: async (
+    projects: async (
       _,
       {
         search,
