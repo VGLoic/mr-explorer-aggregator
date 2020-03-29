@@ -1,3 +1,4 @@
+import { isAfter } from "date-fns";
 import { Project, MergeRequest, Note } from "../dataSources/project";
 import { User } from "../dataSources/user";
 import {
@@ -35,11 +36,18 @@ const toProjectEdge = (project: Project): ProjectEdge => {
 
 const toMergeRequestConnection = (
   first: number,
-  mergeRequests: MergeRequest[]
+  mergeRequests: MergeRequest[],
+  toDate: string
 ): MergeRequestConnection => {
-  const hasNextPage = mergeRequests.length > first;
+  const filteredMergeRequests = toDate
+    ? mergeRequests.filter((mergeRequest): boolean =>
+        isAfter(new Date(toDate), new Date(mergeRequest.createdAt))
+      )
+    : mergeRequests;
 
-  const edges: MergeRequestEdge[] = mergeRequests
+  const hasNextPage = filteredMergeRequests.length > first;
+
+  const edges: MergeRequestEdge[] = filteredMergeRequests
     .map(toMergeRequestEdge)
     .slice(0, first);
 

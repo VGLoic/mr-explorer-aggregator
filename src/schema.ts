@@ -46,7 +46,9 @@ const typeDefs: DocumentNode = gql`
     users: [User]
     mergeRequests(
       first: Int = 5
-      after: String = "2019-01-01"
+      fromDate: String = "2019-01-01"
+      toDate: String
+      after: String
       mrState: MrStates = OPENED
     ): MergeRequestConnection
   }

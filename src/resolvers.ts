@@ -1,3 +1,4 @@
+import { isAfter } from "date-fns";
 import { Context } from "./context/context";
 import { User } from "./dataSources/user";
 import { Project, MergeRequest, Note } from "./dataSources/project";
@@ -64,20 +65,48 @@ const resolvers = {
       { id: projectId }: Project,
       {
         first,
+        fromDate,
+        toDate,
         after,
         mrState,
-      }: { first: number; after: string; mrState: MrStates },
+      }: {
+        first: number;
+        fromDate: string;
+        toDate?: string;
+        after?: string;
+        mrState: MrStates;
+      },
       { dataSources }: Context
     ): Promise<MergeRequestConnection> => {
       if (first > parseInt(configService.get("pageLimit"))) {
         throw new Error("Ooops, that much quantity is not supported yet :(");
       }
+
+      let effectiveAfter: string = fromDate;
+
+      if (after) {
+        const afterDateFormat = new Date(after);
+        const fromDateFormat = new Date(fromDate);
+
+        if (toDate) {
+          const toDateFormat = new Date(toDate);
+          if (isAfter(afterDateFormat, toDateFormat)) {
+            throw new Error("cursor cannot be after the toDate");
+          }
+        }
+
+        if (isAfter(fromDateFormat, afterDateFormat)) {
+          throw new Error("fromDate cannot be after the cursor");
+        }
+        effectiveAfter = after;
+      }
+
       const mergeRequests: MergeRequest[] = await dataSources.projectAPI.getProjectMergeRequests(
         projectId.toString(),
         mrState,
-        after
+        effectiveAfter
       );
-      return toMergeRequestConnection(first, mergeRequests);
+      return toMergeRequestConnection(first, mergeRequests, toDate);
     },
   },
   MergeRequest: {
