@@ -6,6 +6,9 @@
   "scripts": {
     "start:dev": "webpack --watch",
     "build": "webpack",
+    "test": "jest --setupFiles dotenv/config",
+    "test:watch": "jest --watch --setupFiles dotenv/config",
+    "test:cover": "jest --coverage --setupFiles dotenv/config",
     "prettier": "prettier --write src/"
   },
   "dependencies": {
@@ -15,8 +18,11 @@
     "graphql": "^14.5.8"
   },
   "devDependencies": {
+    "@types/jest": "^25.1.4",
     "dotenv": "^8.2.0",
     "husky": ">=4",
+    "jest": "^25.2.4",
+    "jest-sonar-reporter": "^2.0.0",
     "lint-staged": ">=10",
     "nodemon-webpack-plugin": "^4.2.1",
     "prettier": "2.0.1",
@@ -37,5 +43,10 @@
   "prettier": {
     "useTabs": false,
     "tabWidth": 2
+  },
+  "jestSonar": {
+    "reportPath": "coverage",
+    "reportFile": "test-reporter.xml",
+    "indent": 4
   }
 }
