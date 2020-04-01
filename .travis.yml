@@ -1,11 +1,15 @@
-sudo: required
-
 language: node_js
 node_js:
     - stable
 
 services:
     - docker
+
+stages:
+    - test
+    - build
+    - name: deploy
+      if: branch = master
 
 before_install:
     # install heroku CLI
@@ -18,45 +22,21 @@ install:
     # install deps
     - yarn install
 
-script:
-    - yarn test
-    - yarn build
-    # build docker images
-    - docker build -t mrexplorers/mr-explorer-aggregator .
-    - docker tag mrexplorers/mr-explorer-aggregator registry.heroku.com/$HEROKU_APP_NAME/web
+jobs:
+    include:
+        - stage: test
+          script: yarn test:cover
+          after_script: bash <(curl -s https://codecov.io/bash)
 
-deploy:
-    provider: script
-    script:
-        # push to docker hub
-        docker push mrexplorers/mr-explorer-aggregator;
-        docker push registry.heroku.com/$HEROKU_APP_NAME/web;
-        heroku container:release web --app $HEROKU_APP_NAME
-    branch: master
+        - stage: build
+          script:
+            # build docker images
+            - docker build -t mrexplorers/mr-explorer-aggregator .
+            - docker tag mrexplorers/mr-explorer-aggregator registry.heroku.com/$HEROKU_APP_NAME/web
 
-
-# stages:
-# - test
-# - deploy to heroku
-# cache:
-#   yarn: true
-#   directories:
-#   - node_modules
-# before_install:
-# - curl -o- -L https://yarnpkg.com/install.sh | bash
-# - export PATH="$HOME/.yarn/bin:$PATH"
-# install: yarn install
-# jobs:
-#   include:
-#   - stage: test
-#     script: yarn test:cover
-#     after_script: bash <(curl -s https://codecov.io/bash)
-#   - stage: deploy to heroku
-#     script: skip
-#     deploy:
-#         provider: heroku
-#         api_key:
-#           secure: RMDo3FLm4B823k5XbNDYPTlrd/TRUukzHU2Ae0mp9xuG4/EcdgPcWZKv1vdPMOjIzrye6W6lxx19Mf72e154VrYhfZl7JhH7YWUkLstgY3REH2AVIYhfQZc1eSIycyL+5z09Po/fOIecL9/o5B17744GwGzsmVp3WQpvQzGF/EGytUDyg9+MhSJF5MvJ6FwlXYEcvFyGP3csMLz05mja25IH8lvlYd668CZRbCIbLdJMBBc4FfIGvhV2jdTrEtGqjOj42cydl0BXiSLdtJdvRowzi68Z6NARRy6b3POTQAMHOoHv39LhdYqwg9l+mji656ArfUaQ2GmUaA6WiOTfnGULszoWabvX3zrHgbWAdrvommmTlJEYTf7TeKk3ywdVGzQZa3XwaUYfPJx/yORs2M9poInDlup1KMuclJfPbsG7H5efGYfi0pZnT+5OlTJKWeIJZF9ODQ4VYDlWn5391CCFBhytRMH0ZvxL65mKW/gVkXTlMpzVdn7tPISxSHnUoIvvrNEPEKYEb/UxYiRi5qlwSuDA7rcGFX0oTQrV7tzrSI0LVG62FjKDS3hcn9H7V6u23mdrGZFc6ZXRNGWWHsSBZtguuGZaJa8lGyLd7zywwpdeFX6IS8LzEicTUGVuqX35g85Jth9wKtdXUAXGWP2Xr117J0MVa2fps47rJlE=
-#         app: mr-explorer
-#         on:
-#           repo: VGLoic/mr-explorer-frontend
+        - stage: deploy
+          script:
+            # push to docker hub
+            docker push mrexplorers/mr-explorer-aggregator;
+            docker push registry.heroku.com/$HEROKU_APP_NAME/web;
+            heroku container:release web --app $HEROKU_APP_NAME
