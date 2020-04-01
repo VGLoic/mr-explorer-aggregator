@@ -4,6 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
+    "start": "node dist/server.js",
     "start:dev": "webpack --watch",
     "build": "webpack",
     "test": "jest --setupFiles dotenv/config",
