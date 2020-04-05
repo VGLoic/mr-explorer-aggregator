@@ -1,4 +1,10 @@
 import { isAfter } from "date-fns";
+import { configService } from "./config/config.service";
+import {
+  toProjectConnection,
+  toMergeRequestConnection,
+  toReviews,
+} from "./common/response.mappers";
 import { Context } from "./context/context";
 import { User } from "./dataSources/user";
 import { Project, MergeRequest, Note } from "./dataSources/project";
@@ -7,12 +13,6 @@ import {
   MergeRequestConnection,
   Reviews,
 } from "./common/response.types";
-import {
-  toProjectConnection,
-  toMergeRequestConnection,
-  toReviews,
-} from "./common/response.mappers";
-import { configService } from "./config/config.service";
 import { MrStates } from "./common/mr-constants";
 import {
   ProjectsInputs,
