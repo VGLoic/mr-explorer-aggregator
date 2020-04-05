@@ -14,6 +14,11 @@ import {
 } from "./common/response.mappers";
 import { configService } from "./config/config.service";
 import { MrStates } from "./common/mr-constants";
+import {
+  ProjectsInputs,
+  MergeRequestsInputs,
+  ProjectInputs,
+} from "./common/request.types";
 
 const resolvers = {
   MrStates: {
@@ -29,11 +34,7 @@ const resolvers = {
     },
     projects: async (
       _,
-      {
-        search,
-        first,
-        after,
-      }: { search: string; first: number; after: number },
+      { search, first, after }: ProjectsInputs,
       { dataSources }: Context
     ): Promise<ProjectConnection> => {
       if (first > parseInt(configService.get("pageLimit"))) {
@@ -47,7 +48,7 @@ const resolvers = {
     },
     project: async (
       _,
-      { projectId }: { projectId: string },
+      { projectId }: ProjectInputs,
       { dataSources }: Context
     ): Promise<Project> => {
       return dataSources.projectAPI.getProjectById(projectId);
@@ -63,19 +64,7 @@ const resolvers = {
     },
     mergeRequests: async (
       { id: projectId }: Project,
-      {
-        first,
-        fromDate,
-        toDate,
-        after,
-        mrState,
-      }: {
-        first: number;
-        fromDate: string;
-        toDate?: string;
-        after?: string;
-        mrState: MrStates;
-      },
+      { first, fromDate, toDate, after, mrState }: MergeRequestsInputs,
       { dataSources }: Context
     ): Promise<MergeRequestConnection> => {
       if (first > parseInt(configService.get("pageLimit"))) {
