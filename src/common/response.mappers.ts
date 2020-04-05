@@ -16,7 +16,8 @@ const toProjectConnection = (
 
   const edges: ProjectEdge[] = projects.map(toProjectEdge).slice(0, first);
 
-  const endCursor: number = hasNextPage ? edges[first - 1].cursor : null;
+  const endCursor: number =
+    edges.length > 0 ? edges[edges.length - 1].cursor : null;
 
   return {
     edges,
@@ -51,7 +52,8 @@ const toMergeRequestConnection = (
     .map(toMergeRequestEdge)
     .slice(0, first);
 
-  const endCursor: string = hasNextPage ? edges[first - 1].cursor : null;
+  const endCursor: string =
+    edges.length > 0 ? edges[edges.length - 1].cursor : null;
 
   return {
     edges,

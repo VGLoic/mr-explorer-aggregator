@@ -37,7 +37,7 @@ const resolvers = {
       { search, first, after }: ProjectsInputs,
       { dataSources }: Context
     ): Promise<ProjectConnection> => {
-      if (first > parseInt(configService.get("pageLimit"))) {
+      if (first >= parseInt(configService.get("pageLimit"))) {
         throw new Error("Ooops, that much quantity is not supported yet :(");
       }
       const projects: Project[] = await dataSources.projectAPI.getUserProjects(
@@ -67,7 +67,7 @@ const resolvers = {
       { first, fromDate, toDate, after, mrState }: MergeRequestsInputs,
       { dataSources }: Context
     ): Promise<MergeRequestConnection> => {
-      if (first > parseInt(configService.get("pageLimit"))) {
+      if (first >= parseInt(configService.get("pageLimit"))) {
         throw new Error("Ooops, that much quantity is not supported yet :(");
       }
 

@@ -4,7 +4,7 @@ interface Config {
 
 class ConfigService {
   config: Config = {
-    pageLimit: "10",
+    pageLimit: "11",
   };
 
   get(key: string): string {
